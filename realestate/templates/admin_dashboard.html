@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - RealEstate MVP</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            color: #1e293b;
+        }
+        .glass-card {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border-radius: 16px;
+            border: none;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .stats-card {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            transition: all 0.2s ease;
+        }
+        .stats-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border-color: #cbd5e1;
+        }
+        .content-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            border: 1px solid #e2e8f0;
+        }
+        .navbar {
+            background: #1e293b !important;
+            border-bottom: 1px solid #334155;
+        }
+        .btn-custom {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border: none;
+            font-size: 14px;
+        }
+        .btn-custom:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .table {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+        .table th {
+            background: #f8fafc;
+            border: none;
+            color: #374151;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .badge {
+            border-radius: 6px;
+            padding: 6px 10px;
+            font-weight: 500;
+            font-size: 12px;
+        }
+        .card-header {
+            border-bottom: 1px solid #e2e8f0;
+            font-weight: 600;
+        }
+        .card-footer {
+            border-top: 1px solid #e2e8f0;
+            background: #f8fafc;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold fs-4" href="/">🏠 RealEstate Admin</a>
+            <div class="d-flex">
+                <a href="/" class="btn btn-outline-light btn-custom me-2">🏠 Home</a>
+                <a href="{% url 'admin-logout' %}" class="btn btn-outline-light btn-custom">🚪 Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container my-4">
+        <!-- Page Header -->
+        <div class="glass-card p-4 text-center text-white mb-4">
+            <h1 class="display-5 fw-bold mb-3">👨‍💼 Admin Dashboard</h1>
+            <p class="lead mb-0">Manage your real estate empire with comprehensive oversight and control</p>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-2">
+                <div class="stats-card text-center p-4">
+                    <h6 class="text-muted mb-2">Total Agents</h6>
+                    <h2 class="fw-bold text-dark">{{ total_agents }}</h2>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="stats-card text-center p-4">
+                    <h6 class="text-muted mb-2">Total Customers</h6>
+                    <h2 class="fw-bold text-dark">{{ total_customers }}</h2>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="stats-card text-center p-4">
+                    <h6 class="text-muted mb-2">Total Projects</h6>
+                    <h2 class="fw-bold text-dark">{{ total_projects }}</h2>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="stats-card text-center p-4">
+                    <h6 class="text-muted mb-2">Total Payments</h6>
+                    <h2 class="fw-bold text-dark">{{ total_payments }}</h2>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stats-card text-center p-4">
+                    <h6 class="text-muted mb-2">Total Amount</h6>
+                    <h2 class="fw-bold text-dark">₹{{ total_payment_amount|floatformat:0 }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- Agents Table -->
+        <div class="content-card mb-4">
+            <div class="card-header bg-primary text-white p-3 d-flex justify-content-between align-items-center" style="border-radius: 20px 20px 0 0;">
+                <h5 class="mb-0">👨‍💼 Agents Overview</h5>
+                <a href="{% url 'add_agent' %}" class="btn btn-light btn-sm btn-custom">➕ Add Agent</a>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Points</th>
+                                <th>Star Level</th>
+                                <th>Next Milestone</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for agent in agents %}
+                            <tr>
+                                <td><strong>{{ agent.username }}</strong></td>
+                                <td>{{ agent.email }}</td>
+                                <td><span class="badge bg-info">{{ agent.total_points }}</span></td>
+                                <td><span class="badge bg-warning">{{ agent.star_level }} ⭐</span></td>
+                                <td>
+                                    {% if agent.next_milestone == 0 %}
+                                        <span class="badge bg-success">🎉 Max Level!</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">{{ agent.next_milestone }} points</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <form method="post" action="{% url 'delete_agent' agent.id %}" style="display: inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger btn-sm btn-custom" 
+                                                onclick="return confirm('Are you sure you want to delete {{ agent.username }}?')">
+                                            🗑️ Delete
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="6" class="text-center text-muted py-4">No agents found</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% if show_more_agents %}
+                <div class="card-footer text-center p-3" style="background: rgba(13, 110, 253, 0.1);">
+                    <small class="text-muted">Showing latest 5 agents. Total: {{ total_agents }}</small>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Customers Table -->
+        <div class="content-card mb-4">
+            <div class="card-header bg-success text-white p-3 d-flex justify-content-between align-items-center" style="border-radius: 20px 20px 0 0;">
+                <h5 class="mb-0">👥 Customer Database</h5>
+                <a href="{% url 'add_customer' %}" class="btn btn-light btn-sm btn-custom">➕ Add Customer</a>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Agent</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for customer in customers %}
+                            <tr>
+                                <td><strong>{{ customer.name }}</strong></td>
+                                <td>{{ customer.email }}</td>
+                                <td><span class="badge bg-primary">{{ customer.agent.username }}</span></td>
+                                <td>
+                                    <form method="post" action="{% url 'delete_customer' customer.id %}" style="display: inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger btn-sm btn-custom" 
+                                                onclick="return confirm('Are you sure you want to delete {{ customer.name }}?')">
+                                            🗑️ Delete
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="4" class="text-center text-muted py-4">No customers found</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% if show_more_customers %}
+                <div class="card-footer text-center p-3" style="background: rgba(25, 135, 84, 0.1);">
+                    <small class="text-muted">Showing latest 5 customers. Total: {{ total_customers }}</small>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Projects Table -->
+        <div class="content-card mb-4">
+            <div class="card-header bg-secondary text-white p-3 d-flex justify-content-between align-items-center" style="border-radius: 20px 20px 0 0;">
+                <h5 class="mb-0">🏗️ Projects Overview</h5>
+                <a href="{% url 'add_project' %}" class="btn btn-light btn-sm btn-custom">➕ Add Project</a>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Project Name</th>
+                                <th>Type</th>
+                                <th>PV Rate</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for project in projects %}
+                            <tr>
+                                <td><strong>{{ project.name }}</strong></td>
+                                <td>
+                                    {% if project.project_type == 'layout' %}
+                                        <span class="badge bg-info">Layout</span>
+                                    {% else %}
+                                        <span class="badge bg-warning">Construction</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if project.project_type == 'layout' %}
+                                        <span class="badge bg-success">1 PV per ₹1000</span>
+                                    {% else %}
+                                        <span class="badge bg-primary">1 PV per ₹3000</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ project.created_at|date:"M d, Y" }}</td>
+                                <td>
+                                    <form method="post" action="{% url 'delete_project' project.id %}" style="display: inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger btn-sm btn-custom" 
+                                                onclick="return confirm('Are you sure you want to delete {{ project.name }}?')">
+                                            🗑️ Delete
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="5" class="text-center text-muted py-4">No projects found</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% if show_more_projects %}
+                <div class="card-footer text-center p-3" style="background: rgba(108, 117, 125, 0.1);">
+                    <small class="text-muted">Showing latest 5 projects. Total: {{ total_projects }}</small>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Payments Table -->
+        <div class="content-card mb-4">
+            <div class="card-header bg-warning text-dark p-3 d-flex justify-content-between align-items-center" style="border-radius: 20px 20px 0 0;">
+                <h5 class="mb-0">💰 Recent Transactions</h5>
+                <a href="{% url 'add_payment' %}" class="btn btn-dark btn-sm btn-custom">➕ Add Payment</a>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Customer</th>
+                                <th>Agent</th>
+                                <th>Amount</th>
+                                <th>Points</th>
+                                <th>Project</th>
+                                <th>Receipt</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for payment in payments %}
+                            <tr>
+                                <td><strong>{{ payment.customer.name }}</strong></td>
+                                <td><span class="badge bg-primary">{{ payment.agent.username }}</span></td>
+                                <td><span class="badge bg-success">₹{{ payment.amount }}</span></td>
+                                <td><span class="badge bg-info">{{ payment.points }} PV</span></td>
+                                <td>
+                                    {% if payment.project %}
+                                        <strong>{{ payment.project.name }}</strong>
+                                        <br><small class="text-muted">({{ payment.project.get_project_type_display }})</small>
+                                    {% else %}
+                                        <span class="text-muted">No project</span>
+                                    {% endif %}
+                                </td>
+                                <td><code>{{ payment.receipt_number }}</code></td>
+                                <td>{{ payment.date|date:"M d, Y H:i" }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="7" class="text-center text-muted py-4">No payments found</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% if show_more_payments %}
+                <div class="card-footer text-center p-3" style="background: rgba(255, 193, 7, 0.1);">
+                    <small class="text-muted">Showing latest 5 payments. Total: {{ total_payments }}</small>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Pending Gifts Table -->
+        <div class="content-card mb-4">
+            <div class="card-header bg-info text-white p-3" style="border-radius: 20px 20px 0 0;">
+                <h5 class="mb-0">🎁 Pending Gifts to Deliver</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Agent</th>
+                                <th>Gift</th>
+                                <th>Star Level</th>
+                                <th>Date Earned</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for gift in pending_gifts %}
+                            <tr>
+                                <td><strong>{{ gift.agent.username }}</strong></td>
+                                <td>{{ gift.gift.name }}</td>
+                                <td><span class="badge bg-warning">{{ gift.gift.required_star_level }} ⭐</span></td>
+                                <td>{{ gift.date_earned|date:"M d, Y" }}</td>
+                                <td>
+                                    <span class="badge bg-warning">{{ gift.status|title }}</span>
+                                </td>
+                                <td>
+                                    <form method="post" action="{% url 'update_gift_status' gift.id %}" style="display: inline;">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="status" value="delivered">
+                                        <button type="submit" class="btn btn-success btn-sm btn-custom">
+                                            ✅ Mark Delivered
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="6" class="text-center text-muted py-4">No pending gifts found</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% if show_more_gifts %}
+                <div class="card-footer text-center p-3" style="background: rgba(13, 202, 240, 0.1);">
+                    <small class="text-muted">Showing latest 5 pending gifts. More available.</small>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
