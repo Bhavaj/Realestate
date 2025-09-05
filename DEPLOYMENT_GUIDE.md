@@ -78,7 +78,7 @@ Same as Railway - push to GitHub
 4. **Connect your GitHub repo**
 5. **Configure:**
    - **Build Command:** `pip install -r requirements.txt`
-   - **Start Command:** `gunicorn realestate_project.wsgi:application`
+   - **Start Command:** `gunicorn realestate_project.wsgi:application --bind 0.0.0.0:$PORT`
    - **Environment:** Python 3.11 (specify this version)
    - **Region:** Choose closest to your users
 

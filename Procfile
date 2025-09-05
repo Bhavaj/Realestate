@@ -1,1 +1,1 @@
-web: python railway_startup.py && gunicorn realestate_project.wsgi:application
+web: gunicorn realestate_project.wsgi:application --bind 0.0.0.0:$PORT
