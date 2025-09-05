@@ -84,7 +84,9 @@ Same as Railway - push to GitHub
 
 **Note:** Render uses the regular `Procfile` (not the Railway one with startup script)
 
-**Important:** Make sure to set Python version to 3.11 in Render settings to avoid compatibility issues!
+**CRITICAL:** Make sure to set Python version to 3.11 in Render settings! The default 3.13 causes psycopg2 compatibility issues.
+
+**Alternative:** Use the `render.yaml` file I created - it automatically configures everything correctly.
 
 ### Step 3: Add Database
 1. **In Render dashboard → "New" → "PostgreSQL"**
