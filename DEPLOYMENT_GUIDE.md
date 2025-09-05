@@ -28,17 +28,45 @@ DEBUG=False
 DATABASE_URL=postgresql://... (Railway provides this automatically)
 ```
 
-### Step 4: Run Migrations
-In Railway dashboard → Deployments → View Logs → Run Console:
+### Step 4: Run Migrations (Easiest Method)
+**Option A: Use Railway CLI (Recommended)**
 ```bash
-python manage.py migrate
-python manage.py createsuperuser
-python manage.py setup_gifts
+# Install Railway CLI
+npm install -g @railway/cli
+
+# Login and connect to your project
+railway login
+railway link
+
+# Run migrations
+railway run python manage.py migrate
+railway run python manage.py createsuperuser
+railway run python manage.py setup_gifts
+```
+
+**Option B: Add to your code (Alternative)**
+Create a `railway_startup.py` file in your project root:
+```python
+import os
+import django
+from django.core.management import execute_from_command_line
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'realestate_project.settings')
+django.setup()
+
+# Run migrations automatically
+execute_from_command_line(['manage.py', 'migrate'])
+execute_from_command_line(['manage.py', 'setup_gifts'])
+```
+
+Then update your `Procfile`:
+```
+web: python railway_startup.py && gunicorn realestate_project.wsgi:application
 ```
 
 ---
 
-## Option 2: Render (Also Great)
+## Option 2: Render (Also Great - Easier Console Access)
 
 ### Step 1: Prepare Your Code
 Same as Railway - push to GitHub
@@ -52,16 +80,37 @@ Same as Railway - push to GitHub
    - **Build Command:** `pip install -r requirements.txt`
    - **Start Command:** `gunicorn realestate_project.wsgi:application`
    - **Environment:** Python 3
+   - **Region:** Choose closest to your users
+
+**Note:** Render uses the regular `Procfile` (not the Railway one with startup script)
 
 ### Step 3: Add Database
 1. **In Render dashboard → "New" → "PostgreSQL"**
-2. **Copy the database URL**
-3. **Add to your web service environment variables:**
+2. **Choose "Free" plan**
+3. **Copy the database URL**
+4. **Go back to your Web Service**
+5. **Go to "Environment" tab**
+6. **Add these environment variables:**
    ```
-   DATABASE_URL=postgresql://...
-   SECRET_KEY=your-secret-key
+   DATABASE_URL=postgresql://... (from step 3)
+   SECRET_KEY=your-secret-key-here-make-it-long-and-random
    DEBUG=False
    ```
+
+### Step 4: Run Migrations (Easy!)
+1. **Go to your Web Service dashboard**
+2. **Click "Shell" button** (this actually works!)
+3. **Run these commands:**
+   ```bash
+   python manage.py migrate
+   python manage.py createsuperuser
+   python manage.py setup_gifts
+   ```
+
+### Step 5: Deploy
+1. **Click "Manual Deploy" → "Deploy latest commit"**
+2. **Wait for deployment to complete**
+3. **Your app will be live at:** `https://your-app-name.onrender.com`
 
 ---
 
