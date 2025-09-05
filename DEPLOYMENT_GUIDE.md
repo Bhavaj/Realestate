@@ -79,10 +79,12 @@ Same as Railway - push to GitHub
 5. **Configure:**
    - **Build Command:** `pip install -r requirements.txt`
    - **Start Command:** `gunicorn realestate_project.wsgi:application`
-   - **Environment:** Python 3
+   - **Environment:** Python 3.11 (specify this version)
    - **Region:** Choose closest to your users
 
 **Note:** Render uses the regular `Procfile` (not the Railway one with startup script)
+
+**Important:** Make sure to set Python version to 3.11 in Render settings to avoid compatibility issues!
 
 ### Step 3: Add Database
 1. **In Render dashboard → "New" → "PostgreSQL"**
