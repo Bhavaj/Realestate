@@ -20,6 +20,9 @@ urlpatterns = [
     path('delete-agent/<int:agent_id>/', views.delete_agent, name='delete_agent'),
     path('delete-customer/<int:customer_id>/', views.delete_customer, name='delete_customer'),
     path('delete-project/<int:project_id>/', views.delete_project, name='delete_project'),
+
+    # Payment deletion
+    path('delete-payment/<int:payment_id>/', views.delete_payment, name='delete_payment'),
     path('update-gift-status/<int:gift_id>/', views.update_gift_status, name='update_gift_status'),
 
     # Customer routes

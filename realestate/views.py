@@ -1,3 +1,22 @@
+from django.views.decorators.http import require_POST
+
+# ...existing code...
+
+@require_POST
+def delete_payment(request, payment_id):
+    if not request.user.is_staff:
+        messages.error(request, "Access denied. Admin privileges required.")
+        return redirect('admin-login')
+    payment = get_object_or_404(Payment, id=payment_id)
+    agent = payment.agent
+    payment.delete()
+    # Recalculate agent's total points from all remaining payments
+    total_points = Payment.objects.filter(agent=agent).aggregate(total=Sum('points'))['total'] or 0
+    agent.total_points = total_points
+    agent.update_star_level()
+    agent.save()
+    messages.success(request, "Payment deleted and agent points updated.")
+    return redirect('admin-dashboard')
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
