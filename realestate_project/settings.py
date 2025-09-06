@@ -76,8 +76,12 @@ WSGI_APPLICATION = 'realestate_project.wsgi.application'
 
 if os.environ.get('DATABASE_URL'):
     import dj_database_url
+    db_config = dj_database_url.parse(os.environ.get('DATABASE_URL'))
+    # Use psycopg3 backend if using PostgreSQL
+    if db_config['ENGINE'] == 'django.db.backends.postgresql':
+        db_config['ENGINE'] = 'django.db.backends.postgresql_psycopg'
     DATABASES = {
-        'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
+        'default': db_config
     }
 else:
     DATABASES = {
