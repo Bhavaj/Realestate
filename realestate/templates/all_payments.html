@@ -90,6 +90,63 @@
             <p class="lead mb-0">Complete list of all payments in the system ({{ total_payments }} total)</p>
         </div>
 
+        <!-- Search and Filter Section -->
+        <div class="content-card mb-4">
+            <div class="card-header bg-light p-3">
+                <h6 class="mb-0">🔍 Search & Filter</h6>
+            </div>
+            <div class="card-body">
+                <form method="GET" class="row g-3">
+                    <div class="col-md-3">
+                        <label for="search" class="form-label">Search</label>
+                        <input type="text" class="form-control" id="search" name="search" 
+                               value="{{ search_query }}" placeholder="Search by customer, agent, receipt...">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="agent" class="form-label">Agent</label>
+                        <select class="form-select" id="agent" name="agent">
+                            <option value="">All Agents</option>
+                            {% for agent in agents %}
+                                <option value="{{ agent.id }}" {% if agent_filter == agent.id|stringformat:"s" %}selected{% endif %}>
+                                    {{ agent.username }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="project" class="form-label">Project</label>
+                        <select class="form-select" id="project" name="project">
+                            <option value="">All Projects</option>
+                            {% for project in projects %}
+                                <option value="{{ project.id }}" {% if project_filter == project.id|stringformat:"s" %}selected{% endif %}>
+                                    {{ project.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="sort" class="form-label">Sort By</label>
+                        <select class="form-select" id="sort" name="sort">
+                            <option value="-date" {% if sort_by == '-date' %}selected{% endif %}>Date Newest</option>
+                            <option value="date" {% if sort_by == 'date' %}selected{% endif %}>Date Oldest</option>
+                            <option value="customer" {% if sort_by == 'customer' %}selected{% endif %}>Customer A-Z</option>
+                            <option value="-customer" {% if sort_by == '-customer' %}selected{% endif %}>Customer Z-A</option>
+                            <option value="agent" {% if sort_by == 'agent' %}selected{% endif %}>Agent A-Z</option>
+                            <option value="-agent" {% if sort_by == '-agent' %}selected{% endif %}>Agent Z-A</option>
+                            <option value="-amount" {% if sort_by == '-amount' %}selected{% endif %}>Amount High-Low</option>
+                            <option value="amount" {% if sort_by == 'amount' %}selected{% endif %}>Amount Low-High</option>
+                            <option value="-points" {% if sort_by == '-points' %}selected{% endif %}>Points High-Low</option>
+                            <option value="points" {% if sort_by == 'points' %}selected{% endif %}>Points Low-High</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary btn-custom me-2">🔍 Search</button>
+                        <a href="{% url 'all_payments' %}" class="btn btn-outline-secondary btn-custom">🔄 Clear</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <!-- Payments Table -->
         <div class="content-card mb-4">
             <div class="card-header bg-warning text-dark p-3" style="border-radius: 20px 20px 0 0;">

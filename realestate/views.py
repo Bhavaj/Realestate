@@ -23,7 +23,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.db.models import Sum
+from django.db.models import Sum, Q
 from .models import Agent, Customer, Payment, Gift, AgentGift, Project
 
 
@@ -368,12 +368,55 @@ def all_agents(request):
         messages.error(request, "Access denied. Admin privileges required.")
         return redirect('admin-login')
     
-    agents = Agent.objects.all().order_by('-id')
+    # Get search and filter parameters
+    search_query = request.GET.get('search', '').strip()
+    star_level_filter = request.GET.get('star_level', '')
+    sort_by = request.GET.get('sort', '-id')
+    
+    # Start with all agents
+    agents = Agent.objects.all()
+    
+    # Apply search filter
+    if search_query:
+        agents = agents.filter(
+            Q(username__icontains=search_query) |
+            Q(email__icontains=search_query) |
+            Q(first_name__icontains=search_query) |
+            Q(last_name__icontains=search_query)
+        )
+    
+    # Apply star level filter
+    if star_level_filter and star_level_filter.isdigit():
+        agents = agents.filter(star_level=int(star_level_filter))
+    
+    # Apply sorting
+    valid_sorts = {
+        'name': 'username',
+        '-name': '-username',
+        'email': 'email',
+        '-email': '-email',
+        'points': 'total_points',
+        '-points': '-total_points',
+        'star': 'star_level',
+        '-star': '-star_level',
+        'id': 'id',
+        '-id': '-id'
+    }
+    sort_field = valid_sorts.get(sort_by, '-id')
+    agents = agents.order_by(sort_field)
+    
     total_agents = agents.count()
+    
+    # Get unique star levels for filter dropdown
+    star_levels = Agent.objects.values_list('star_level', flat=True).distinct().order_by('star_level')
     
     context = {
         "agents": agents,
         "total_agents": total_agents,
+        "search_query": search_query,
+        "star_level_filter": star_level_filter,
+        "sort_by": sort_by,
+        "star_levels": star_levels,
     }
     return render(request, "all_agents.html", context)
 
@@ -384,12 +427,51 @@ def all_customers(request):
         messages.error(request, "Access denied. Admin privileges required.")
         return redirect('admin-login')
     
-    customers = Customer.objects.all().order_by('-id')
+    # Get search and filter parameters
+    search_query = request.GET.get('search', '').strip()
+    agent_filter = request.GET.get('agent', '')
+    sort_by = request.GET.get('sort', '-id')
+    
+    # Start with all customers
+    customers = Customer.objects.select_related('agent').all()
+    
+    # Apply search filter
+    if search_query:
+        customers = customers.filter(
+            Q(name__icontains=search_query) |
+            Q(email__icontains=search_query)
+        )
+    
+    # Apply agent filter
+    if agent_filter and agent_filter.isdigit():
+        customers = customers.filter(agent_id=int(agent_filter))
+    
+    # Apply sorting
+    valid_sorts = {
+        'name': 'name',
+        '-name': '-name',
+        'email': 'email',
+        '-email': '-email',
+        'agent': 'agent__username',
+        '-agent': '-agent__username',
+        'id': 'id',
+        '-id': '-id'
+    }
+    sort_field = valid_sorts.get(sort_by, '-id')
+    customers = customers.order_by(sort_field)
+    
     total_customers = customers.count()
+    
+    # Get all agents for filter dropdown
+    agents = Agent.objects.all().order_by('username')
     
     context = {
         "customers": customers,
         "total_customers": total_customers,
+        "search_query": search_query,
+        "agent_filter": agent_filter,
+        "sort_by": sort_by,
+        "agents": agents,
     }
     return render(request, "all_customers.html", context)
 
@@ -400,12 +482,48 @@ def all_projects(request):
         messages.error(request, "Access denied. Admin privileges required.")
         return redirect('admin-login')
     
-    projects = Project.objects.all().order_by('-id')
+    # Get search and filter parameters
+    search_query = request.GET.get('search', '').strip()
+    project_type_filter = request.GET.get('project_type', '')
+    sort_by = request.GET.get('sort', '-id')
+    
+    # Start with all projects
+    projects = Project.objects.all()
+    
+    # Apply search filter
+    if search_query:
+        projects = projects.filter(name__icontains=search_query)
+    
+    # Apply project type filter
+    if project_type_filter:
+        projects = projects.filter(project_type=project_type_filter)
+    
+    # Apply sorting
+    valid_sorts = {
+        'name': 'name',
+        '-name': '-name',
+        'type': 'project_type',
+        '-type': '-project_type',
+        'created': 'created_at',
+        '-created': '-created_at',
+        'id': 'id',
+        '-id': '-id'
+    }
+    sort_field = valid_sorts.get(sort_by, '-id')
+    projects = projects.order_by(sort_field)
+    
     total_projects = projects.count()
+    
+    # Get unique project types for filter dropdown
+    project_types = Project.PROJECT_TYPES
     
     context = {
         "projects": projects,
         "total_projects": total_projects,
+        "search_query": search_query,
+        "project_type_filter": project_type_filter,
+        "sort_by": sort_by,
+        "project_types": project_types,
     }
     return render(request, "all_projects.html", context)
 
@@ -416,12 +534,67 @@ def all_payments(request):
         messages.error(request, "Access denied. Admin privileges required.")
         return redirect('admin-login')
     
-    payments = Payment.objects.select_related('project', 'customer', 'agent').all().order_by('-date')
+    # Get search and filter parameters
+    search_query = request.GET.get('search', '').strip()
+    agent_filter = request.GET.get('agent', '')
+    project_filter = request.GET.get('project', '')
+    sort_by = request.GET.get('sort', '-date')
+    
+    # Start with all payments
+    payments = Payment.objects.select_related('project', 'customer', 'agent').all()
+    
+    # Apply search filter
+    if search_query:
+        payments = payments.filter(
+            Q(customer__name__icontains=search_query) |
+            Q(agent__username__icontains=search_query) |
+            Q(receipt_number__icontains=search_query) |
+            Q(project__name__icontains=search_query)
+        )
+    
+    # Apply agent filter
+    if agent_filter and agent_filter.isdigit():
+        payments = payments.filter(agent_id=int(agent_filter))
+    
+    # Apply project filter
+    if project_filter and project_filter.isdigit():
+        payments = payments.filter(project_id=int(project_filter))
+    
+    # Apply sorting
+    valid_sorts = {
+        'customer': 'customer__name',
+        '-customer': '-customer__name',
+        'agent': 'agent__username',
+        '-agent': '-agent__username',
+        'amount': 'amount',
+        '-amount': '-amount',
+        'points': 'points',
+        '-points': '-points',
+        'project': 'project__name',
+        '-project': '-project__name',
+        'date': 'date',
+        '-date': '-date',
+        'id': 'id',
+        '-id': '-id'
+    }
+    sort_field = valid_sorts.get(sort_by, '-date')
+    payments = payments.order_by(sort_field)
+    
     total_payments = payments.count()
+    
+    # Get all agents and projects for filter dropdowns
+    agents = Agent.objects.all().order_by('username')
+    projects = Project.objects.all().order_by('name')
     
     context = {
         "payments": payments,
         "total_payments": total_payments,
+        "search_query": search_query,
+        "agent_filter": agent_filter,
+        "project_filter": project_filter,
+        "sort_by": sort_by,
+        "agents": agents,
+        "projects": projects,
     }
     return render(request, "all_payments.html", context)
 

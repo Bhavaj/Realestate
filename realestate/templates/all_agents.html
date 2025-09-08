@@ -90,6 +90,52 @@
             <p class="lead mb-0">Complete list of all agents in the system ({{ total_agents }} total)</p>
         </div>
 
+        <!-- Search and Filter Section -->
+        <div class="content-card mb-4">
+            <div class="card-header bg-light p-3">
+                <h6 class="mb-0">🔍 Search & Filter</h6>
+            </div>
+            <div class="card-body">
+                <form method="GET" class="row g-3">
+                    <div class="col-md-4">
+                        <label for="search" class="form-label">Search</label>
+                        <input type="text" class="form-control" id="search" name="search" 
+                               value="{{ search_query }}" placeholder="Search by name, email...">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="star_level" class="form-label">Star Level</label>
+                        <select class="form-select" id="star_level" name="star_level">
+                            <option value="">All Star Levels</option>
+                            {% for level in star_levels %}
+                                <option value="{{ level }}" {% if star_level_filter == level|stringformat:"s" %}selected{% endif %}>
+                                    {{ level }} ⭐
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="sort" class="form-label">Sort By</label>
+                        <select class="form-select" id="sort" name="sort">
+                            <option value="-id" {% if sort_by == '-id' %}selected{% endif %}>Newest First</option>
+                            <option value="id" {% if sort_by == 'id' %}selected{% endif %}>Oldest First</option>
+                            <option value="name" {% if sort_by == 'name' %}selected{% endif %}>Name A-Z</option>
+                            <option value="-name" {% if sort_by == '-name' %}selected{% endif %}>Name Z-A</option>
+                            <option value="email" {% if sort_by == 'email' %}selected{% endif %}>Email A-Z</option>
+                            <option value="-email" {% if sort_by == '-email' %}selected{% endif %}>Email Z-A</option>
+                            <option value="-points" {% if sort_by == '-points' %}selected{% endif %}>Points High-Low</option>
+                            <option value="points" {% if sort_by == 'points' %}selected{% endif %}>Points Low-High</option>
+                            <option value="-star" {% if sort_by == '-star' %}selected{% endif %}>Star Level High-Low</option>
+                            <option value="star" {% if sort_by == 'star' %}selected{% endif %}>Star Level Low-High</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary btn-custom me-2">🔍 Search</button>
+                        <a href="{% url 'all_agents' %}" class="btn btn-outline-secondary btn-custom">🔄 Clear</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <!-- Agents Table -->
         <div class="content-card mb-4">
             <div class="card-header bg-primary text-white p-3" style="border-radius: 20px 20px 0 0;">

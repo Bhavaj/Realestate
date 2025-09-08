@@ -90,6 +90,50 @@
             <p class="lead mb-0">Complete list of all projects in the system ({{ total_projects }} total)</p>
         </div>
 
+        <!-- Search and Filter Section -->
+        <div class="content-card mb-4">
+            <div class="card-header bg-light p-3">
+                <h6 class="mb-0">🔍 Search & Filter</h6>
+            </div>
+            <div class="card-body">
+                <form method="GET" class="row g-3">
+                    <div class="col-md-4">
+                        <label for="search" class="form-label">Search</label>
+                        <input type="text" class="form-control" id="search" name="search" 
+                               value="{{ search_query }}" placeholder="Search by project name...">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="project_type" class="form-label">Project Type</label>
+                        <select class="form-select" id="project_type" name="project_type">
+                            <option value="">All Types</option>
+                            {% for type_code, type_name in project_types %}
+                                <option value="{{ type_code }}" {% if project_type_filter == type_code %}selected{% endif %}>
+                                    {{ type_name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="sort" class="form-label">Sort By</label>
+                        <select class="form-select" id="sort" name="sort">
+                            <option value="-id" {% if sort_by == '-id' %}selected{% endif %}>Newest First</option>
+                            <option value="id" {% if sort_by == 'id' %}selected{% endif %}>Oldest First</option>
+                            <option value="name" {% if sort_by == 'name' %}selected{% endif %}>Name A-Z</option>
+                            <option value="-name" {% if sort_by == '-name' %}selected{% endif %}>Name Z-A</option>
+                            <option value="type" {% if sort_by == 'type' %}selected{% endif %}>Type A-Z</option>
+                            <option value="-type" {% if sort_by == '-type' %}selected{% endif %}>Type Z-A</option>
+                            <option value="-created" {% if sort_by == '-created' %}selected{% endif %}>Created Newest</option>
+                            <option value="created" {% if sort_by == 'created' %}selected{% endif %}>Created Oldest</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary btn-custom me-2">🔍 Search</button>
+                        <a href="{% url 'all_projects' %}" class="btn btn-outline-secondary btn-custom">🔄 Clear</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <!-- Projects Table -->
         <div class="content-card mb-4">
             <div class="card-header bg-secondary text-white p-3" style="border-radius: 20px 20px 0 0;">

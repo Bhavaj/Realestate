@@ -90,6 +90,50 @@
             <p class="lead mb-0">Complete list of all customers in the system ({{ total_customers }} total)</p>
         </div>
 
+        <!-- Search and Filter Section -->
+        <div class="content-card mb-4">
+            <div class="card-header bg-light p-3">
+                <h6 class="mb-0">🔍 Search & Filter</h6>
+            </div>
+            <div class="card-body">
+                <form method="GET" class="row g-3">
+                    <div class="col-md-4">
+                        <label for="search" class="form-label">Search</label>
+                        <input type="text" class="form-control" id="search" name="search" 
+                               value="{{ search_query }}" placeholder="Search by name, email...">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="agent" class="form-label">Agent</label>
+                        <select class="form-select" id="agent" name="agent">
+                            <option value="">All Agents</option>
+                            {% for agent in agents %}
+                                <option value="{{ agent.id }}" {% if agent_filter == agent.id|stringformat:"s" %}selected{% endif %}>
+                                    {{ agent.username }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="sort" class="form-label">Sort By</label>
+                        <select class="form-select" id="sort" name="sort">
+                            <option value="-id" {% if sort_by == '-id' %}selected{% endif %}>Newest First</option>
+                            <option value="id" {% if sort_by == 'id' %}selected{% endif %}>Oldest First</option>
+                            <option value="name" {% if sort_by == 'name' %}selected{% endif %}>Name A-Z</option>
+                            <option value="-name" {% if sort_by == '-name' %}selected{% endif %}>Name Z-A</option>
+                            <option value="email" {% if sort_by == 'email' %}selected{% endif %}>Email A-Z</option>
+                            <option value="-email" {% if sort_by == '-email' %}selected{% endif %}>Email Z-A</option>
+                            <option value="agent" {% if sort_by == 'agent' %}selected{% endif %}>Agent A-Z</option>
+                            <option value="-agent" {% if sort_by == '-agent' %}selected{% endif %}>Agent Z-A</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary btn-custom me-2">🔍 Search</button>
+                        <a href="{% url 'all_customers' %}" class="btn btn-outline-secondary btn-custom">🔄 Clear</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <!-- Customers Table -->
         <div class="content-card mb-4">
             <div class="card-header bg-success text-white p-3" style="border-radius: 20px 20px 0 0;">
