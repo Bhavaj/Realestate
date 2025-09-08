@@ -143,7 +143,10 @@
         <div class="content-card mb-4">
             <div class="card-header bg-primary text-white p-3 d-flex justify-content-between align-items-center" style="border-radius: 20px 20px 0 0;">
                 <h5 class="mb-0">👨‍💼 Agents Overview</h5>
-                <a href="{% url 'add_agent' %}" class="btn btn-light btn-sm btn-custom">➕ Add Agent</a>
+                <div>
+                    <a href="{% url 'add_agent' %}" class="btn btn-light btn-sm btn-custom me-2">➕ Add Agent</a>
+                    <a href="{% url 'all_agents' %}" class="btn btn-outline-light btn-sm btn-custom">📋 View All</a>
+                </div>
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
@@ -190,7 +193,7 @@
                 </div>
                 {% if show_more_agents %}
                 <div class="card-footer text-center p-3" style="background: rgba(13, 110, 253, 0.1);">
-                    <small class="text-muted">Showing latest 5 agents. Total: {{ total_agents }}</small>
+                    <small class="text-muted">Showing latest 4 agents. Total: {{ total_agents }}</small>
                 </div>
                 {% endif %}
             </div>
@@ -200,7 +203,10 @@
         <div class="content-card mb-4">
             <div class="card-header bg-success text-white p-3 d-flex justify-content-between align-items-center" style="border-radius: 20px 20px 0 0;">
                 <h5 class="mb-0">👥 Customer Database</h5>
-                <a href="{% url 'add_customer' %}" class="btn btn-light btn-sm btn-custom">➕ Add Customer</a>
+                <div>
+                    <a href="{% url 'add_customer' %}" class="btn btn-light btn-sm btn-custom me-2">➕ Add Customer</a>
+                    <a href="{% url 'all_customers' %}" class="btn btn-outline-light btn-sm btn-custom">📋 View All</a>
+                </div>
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
@@ -237,7 +243,7 @@
                 </div>
                 {% if show_more_customers %}
                 <div class="card-footer text-center p-3" style="background: rgba(25, 135, 84, 0.1);">
-                    <small class="text-muted">Showing latest 5 customers. Total: {{ total_customers }}</small>
+                    <small class="text-muted">Showing latest 4 customers. Total: {{ total_customers }}</small>
                 </div>
                 {% endif %}
             </div>
@@ -247,7 +253,10 @@
         <div class="content-card mb-4">
             <div class="card-header bg-secondary text-white p-3 d-flex justify-content-between align-items-center" style="border-radius: 20px 20px 0 0;">
                 <h5 class="mb-0">🏗️ Projects Overview</h5>
-                <a href="{% url 'add_project' %}" class="btn btn-light btn-sm btn-custom">➕ Add Project</a>
+                <div>
+                    <a href="{% url 'add_project' %}" class="btn btn-light btn-sm btn-custom me-2">➕ Add Project</a>
+                    <a href="{% url 'all_projects' %}" class="btn btn-outline-light btn-sm btn-custom">📋 View All</a>
+                </div>
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
@@ -298,7 +307,7 @@
                 </div>
                 {% if show_more_projects %}
                 <div class="card-footer text-center p-3" style="background: rgba(108, 117, 125, 0.1);">
-                    <small class="text-muted">Showing latest 5 projects. Total: {{ total_projects }}</small>
+                    <small class="text-muted">Showing latest 4 projects. Total: {{ total_projects }}</small>
                 </div>
                 {% endif %}
             </div>
@@ -308,7 +317,10 @@
         <div class="content-card mb-4">
             <div class="card-header bg-warning text-dark p-3 d-flex justify-content-between align-items-center" style="border-radius: 20px 20px 0 0;">
                 <h5 class="mb-0">💰 Recent Transactions</h5>
-                <a href="{% url 'add_payment' %}" class="btn btn-dark btn-sm btn-custom">➕ Add Payment</a>
+                <div>
+                    <a href="{% url 'add_payment' %}" class="btn btn-dark btn-sm btn-custom me-2">➕ Add Payment</a>
+                    <a href="{% url 'all_payments' %}" class="btn btn-outline-dark btn-sm btn-custom">📋 View All</a>
+                </div>
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
@@ -351,14 +363,14 @@
                                 </td>
                             </tr>
                             {% empty %}
-                            <tr><td colspan="7" class="text-center text-muted py-4">No payments found</td></tr>
+                            <tr><td colspan="8" class="text-center text-muted py-4">No payments found</td></tr>
                             {% endfor %}
                         </tbody>
                     </table>
                 </div>
                 {% if show_more_payments %}
                 <div class="card-footer text-center p-3" style="background: rgba(255, 193, 7, 0.1);">
-                    <small class="text-muted">Showing latest 5 payments. Total: {{ total_payments }}</small>
+                    <small class="text-muted">Showing latest 4 payments. Total: {{ total_payments }}</small>
                 </div>
                 {% endif %}
             </div>
@@ -410,7 +422,7 @@
                 </div>
                 {% if show_more_gifts %}
                 <div class="card-footer text-center p-3" style="background: rgba(13, 202, 240, 0.1);">
-                    <small class="text-muted">Showing latest 5 pending gifts. More available.</small>
+                    <small class="text-muted">Showing latest 4 pending gifts. More available.</small>
                 </div>
                 {% endif %}
             </div>

@@ -15,7 +15,9 @@ def delete_payment(request, payment_id):
     agent.total_points = total_points
     agent.update_star_level()
     agent.save()
-    messages.success(request, "Payment deleted and agent points updated.")
+    # Optionally, update next_milestone_points in session for admin dashboard refresh
+    request.session['agent_next_milestone_points'] = agent.next_milestone()
+    messages.success(request, "Payment deleted and agent points, star level, and next milestone updated.")
     return redirect('admin-dashboard')
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -72,11 +74,11 @@ def admin_dashboard(request):
         messages.error(request, "Access denied. Admin privileges required.")
         return redirect('admin-login')
     
-    agents = Agent.objects.all().order_by('-id')[:5]  # Latest 5 agents
-    customers = Customer.objects.all().order_by('-id')[:5]  # Latest 5 customers
-    projects = Project.objects.all().order_by('-id')[:5]  # Latest 5 projects
-    payments = Payment.objects.select_related('project', 'customer', 'agent').all().order_by('-date')[:5]  # Latest 5 payments
-    pending_gifts = AgentGift.objects.filter(status='pending').select_related('agent', 'gift').order_by('-date_earned')[:5]  # Latest 5 gifts
+    agents = Agent.objects.all().order_by('-id')[:4]  # Latest 4 agents
+    customers = Customer.objects.all().order_by('-id')[:4]  # Latest 4 customers
+    projects = Project.objects.all().order_by('-id')[:4]  # Latest 4 projects
+    payments = Payment.objects.select_related('project', 'customer', 'agent').all().order_by('-date')[:4]  # Latest 4 payments
+    pending_gifts = AgentGift.objects.filter(status='pending').select_related('agent', 'gift').order_by('-date_earned')[:4]  # Latest 4 gifts
     
     total_payment_amount = Payment.objects.aggregate(total=Sum('amount'))['total'] or 0
     total_points_awarded = Payment.objects.aggregate(total=Sum('points'))['total'] or 0
@@ -99,11 +101,11 @@ def admin_dashboard(request):
         "pending_gifts": pending_gifts,
         "total_payment_amount": total_payment_amount,
         "total_points_awarded": total_points_awarded,
-        "show_more_agents": total_agents > 5,
-        "show_more_customers": total_customers > 5,
-        "show_more_projects": total_projects > 5,
-        "show_more_payments": total_payments > 5,
-        "show_more_gifts": AgentGift.objects.filter(status='pending').count() > 5,
+        "show_more_agents": total_agents > 4,
+        "show_more_customers": total_customers > 4,
+        "show_more_projects": total_projects > 4,
+        "show_more_payments": total_payments > 4,
+        "show_more_gifts": AgentGift.objects.filter(status='pending').count() > 4,
     }
     return render(request, "admin_dashboard.html", context)
 
@@ -357,5 +359,70 @@ def admin_logout(request):
 def agent_logout(request):
     logout(request)
     return redirect('home')
+
+
+# View All Pages
+@login_required(login_url='admin-login')
+def all_agents(request):
+    if not request.user.is_staff:
+        messages.error(request, "Access denied. Admin privileges required.")
+        return redirect('admin-login')
+    
+    agents = Agent.objects.all().order_by('-id')
+    total_agents = agents.count()
+    
+    context = {
+        "agents": agents,
+        "total_agents": total_agents,
+    }
+    return render(request, "all_agents.html", context)
+
+
+@login_required(login_url='admin-login')
+def all_customers(request):
+    if not request.user.is_staff:
+        messages.error(request, "Access denied. Admin privileges required.")
+        return redirect('admin-login')
+    
+    customers = Customer.objects.all().order_by('-id')
+    total_customers = customers.count()
+    
+    context = {
+        "customers": customers,
+        "total_customers": total_customers,
+    }
+    return render(request, "all_customers.html", context)
+
+
+@login_required(login_url='admin-login')
+def all_projects(request):
+    if not request.user.is_staff:
+        messages.error(request, "Access denied. Admin privileges required.")
+        return redirect('admin-login')
+    
+    projects = Project.objects.all().order_by('-id')
+    total_projects = projects.count()
+    
+    context = {
+        "projects": projects,
+        "total_projects": total_projects,
+    }
+    return render(request, "all_projects.html", context)
+
+
+@login_required(login_url='admin-login')
+def all_payments(request):
+    if not request.user.is_staff:
+        messages.error(request, "Access denied. Admin privileges required.")
+        return redirect('admin-login')
+    
+    payments = Payment.objects.select_related('project', 'customer', 'agent').all().order_by('-date')
+    total_payments = payments.count()
+    
+    context = {
+        "payments": payments,
+        "total_payments": total_payments,
+    }
+    return render(request, "all_payments.html", context)
 
 

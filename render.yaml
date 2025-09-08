@@ -2,12 +2,12 @@ services:
   - type: web
     name: realestate-mvp
     env: python
-    buildCommand: pip install -r requirements.txt
+    buildCommand: chmod +x build.sh && ./build.sh
     startCommand: gunicorn realestate_project.wsgi:application --bind 0.0.0.0:$PORT
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.9
       - key: SECRET_KEY
-        generateValue: true
+        value: django-insecure-k5ees#)vqnwhj2u9ev*368nf^7kk)&#t^_r)njl%(w6&k63h3p
       - key: DEBUG
         value: False
