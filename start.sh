@@ -1,52 +1,36 @@
 #!/bin/bash
 
-# Railway startup script
 echo "🚀 Starting Railway deployment..."
 
-# Wait for database to be ready
-echo "⏳ Waiting for database connection..."
+# Test database connection
+echo "⏳ Testing database connection..."
 python -c "
 import os
-import time
 import django
-from django.db import connection
-from django.core.exceptions import ImproperlyConfigured
-
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'realestate_project.settings')
 django.setup()
 
-max_attempts = 30
-for attempt in range(max_attempts):
-    try:
-        connection.ensure_connection()
-        print('✅ Database connection established!')
-        break
-    except Exception as e:
-        print(f'⏳ Attempt {attempt + 1}/{max_attempts}: Waiting for database...')
-        time.sleep(2)
-else:
-    print('❌ Could not connect to database after 60 seconds')
+from django.db import connection
+try:
+    connection.ensure_connection()
+    print('✅ Database connection successful!')
+except Exception as e:
+    print(f'❌ Database connection failed: {e}')
     exit(1)
 "
 
 # Run migrations
-echo "📊 Running database migrations..."
+echo "📊 Running migrations..."
 python manage.py migrate
 
-# Setup default gifts
-echo "🎁 Setting up default gifts..."
+# Setup gifts
+echo "🎁 Setting up gifts..."
 python manage.py setup_gifts
 
 # Create superuser
-echo "👤 Creating admin superuser..."
+echo "👤 Creating admin user..."
 python manage.py createsu
 
-# Import data if available
-if [ -f "render_data_export.json" ]; then
-    echo "📥 Importing data from Render..."
-    python manage.py import_railway_data render_data_export.json
-fi
-
-# Start the application
-echo "🎉 Starting Django application..."
+# Start server
+echo "🎉 Starting web server..."
 exec gunicorn realestate_project.wsgi:application --bind 0.0.0.0:$PORT
