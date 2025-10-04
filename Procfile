@@ -1,1 +1,1 @@
-web: chmod +x start.sh && ./start.sh
+web: python -c "import os,django; os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'realestate_project.settings'); django.setup(); from django.db import connection; connection.ensure_connection(); print('✅ Database connected!')" && python manage.py migrate && python manage.py setup_gifts && python manage.py createsu && gunicorn realestate_project.wsgi:application --bind 0.0.0.0:$PORT
