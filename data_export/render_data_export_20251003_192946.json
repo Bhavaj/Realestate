@@ -1,0 +1,374 @@
+{
+  "agents": [
+    {
+      "model": "realestate.agent",
+      "pk": 1,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$clJSe4t9TwBexeZtwM3rml$ucCC9M1ilbxqjnO0su0YoS9yV5cfWyZOJjNaCuYr+Fo=",
+        "last_login": "2025-09-08T00:53:27.288Z",
+        "is_superuser": true,
+        "username": "admin",
+        "first_name": "",
+        "last_name": "",
+        "email": "admin@mail.com",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2025-09-01T07:29:25.373Z",
+        "total_points": 0,
+        "star_level": 0,
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "realestate.agent",
+      "pk": 2,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$3gU21JdHPbY8A8kyNxPcXR$d1rt0Jp0qmWt5heGRVdQoM9SmaPC+rxmcNIjjHVqwh8=",
+        "last_login": "2025-09-01T23:07:55.907Z",
+        "is_superuser": false,
+        "username": "bvarri",
+        "first_name": "Bhavaj Madev",
+        "last_name": "Varri",
+        "email": "bhavajbankai@gmail.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2025-09-01T07:31:00.635Z",
+        "total_points": 3833,
+        "star_level": 1,
+        "groups": [],
+        "user_permissions": []
+      }
+    }
+  ],
+  "customers": [
+    {
+      "model": "realestate.customer",
+      "pk": 1,
+      "fields": {
+        "name": "bhagya",
+        "email": "bhagyashanmukha@gmail.com",
+        "agent": 2,
+        "created_at": "2025-09-01T07:31:28.567Z"
+      }
+    },
+    {
+      "model": "realestate.customer",
+      "pk": 2,
+      "fields": {
+        "name": "bhagi",
+        "email": "bhagi@gmail.com",
+        "agent": 2,
+        "created_at": "2025-09-01T07:31:49.816Z"
+      }
+    }
+  ],
+  "projects": [
+    {
+      "model": "realestate.project",
+      "pk": 1,
+      "fields": {
+        "name": "Bhoomipooja",
+        "project_type": "layout",
+        "created_at": "2025-09-01T07:30:26.688Z"
+      }
+    },
+    {
+      "model": "realestate.project",
+      "pk": 2,
+      "fields": {
+        "name": "construction company",
+        "project_type": "construction",
+        "created_at": "2025-09-01T07:32:11.959Z"
+      }
+    }
+  ],
+  "payments": [
+    {
+      "model": "realestate.payment",
+      "pk": 1,
+      "fields": {
+        "customer": 1,
+        "agent": 2,
+        "project": 2,
+        "amount": "1000000.00",
+        "points": 333,
+        "receipt_number": "re1",
+        "date": "2025-09-01T07:32:53.311Z"
+      }
+    },
+    {
+      "model": "realestate.payment",
+      "pk": 2,
+      "fields": {
+        "customer": 1,
+        "agent": 2,
+        "project": 1,
+        "amount": "1000000.00",
+        "points": 1000,
+        "receipt_number": "eee13",
+        "date": "2025-09-01T07:33:33.657Z"
+      }
+    },
+    {
+      "model": "realestate.payment",
+      "pk": 3,
+      "fields": {
+        "customer": 1,
+        "agent": 2,
+        "project": 1,
+        "amount": "2500000.00",
+        "points": 2500,
+        "receipt_number": "re2",
+        "date": "2025-09-01T07:35:20.790Z"
+      }
+    }
+  ],
+  "gifts": [
+    {
+      "model": "realestate.gift",
+      "pk": 1,
+      "fields": {
+        "name": "Executive bag",
+        "description": null,
+        "required_star_level": 1,
+        "created_at": "2025-09-01T07:25:00.367Z"
+      }
+    },
+    {
+      "model": "realestate.gift",
+      "pk": 2,
+      "fields": {
+        "name": "Personal kit",
+        "description": null,
+        "required_star_level": 1,
+        "created_at": "2025-09-01T07:25:00.376Z"
+      }
+    },
+    {
+      "model": "realestate.gift",
+      "pk": 3,
+      "fields": {
+        "name": "General insurance",
+        "description": null,
+        "required_star_level": 1,
+        "created_at": "2025-09-01T07:25:00.384Z"
+      }
+    },
+    {
+      "model": "realestate.gift",
+      "pk": 4,
+      "fields": {
+        "name": "Medical kit",
+        "description": null,
+        "required_star_level": 2,
+        "created_at": "2025-09-01T07:25:00.391Z"
+      }
+    },
+    {
+      "model": "realestate.gift",
+      "pk": 5,
+      "fields": {
+        "name": "Motivation programme",
+        "description": null,
+        "required_star_level": 2,
+        "created_at": "2025-09-01T07:25:00.396Z"
+      }
+    },
+    {
+      "model": "realestate.gift",
+      "pk": 6,
+      "fields": {
+        "name": "Health insurance",
+        "description": null,
+        "required_star_level": 2,
+        "created_at": "2025-09-01T07:25:00.402Z"
+      }
+    },
+    {
+      "model": "realestate.gift",
+      "pk": 7,
+      "fields": {
+        "name": "Children education loan fund \u20b910,000 (10 years)",
+        "description": null,
+        "required_star_level": 3,
+        "created_at": "2025-09-01T07:25:00.407Z"
+      }
+    },
+    {
+      "model": "realestate.gift",
+      "pk": 8,
+      "fields": {
+        "name": "Loan eligibility \u20b92,00,000",
+        "description": null,
+        "required_star_level": 3,
+        "created_at": "2025-09-01T07:25:00.413Z"
+      }
+    },
+    {
+      "model": "realestate.gift",
+      "pk": 9,
+      "fields": {
+        "name": "Term insurance policy \u20b950,00,000",
+        "description": null,
+        "required_star_level": 3,
+        "created_at": "2025-09-01T07:25:00.419Z"
+      }
+    },
+    {
+      "model": "realestate.gift",
+      "pk": 10,
+      "fields": {
+        "name": "Children education loan fund \u20b950,000",
+        "description": null,
+        "required_star_level": 4,
+        "created_at": "2025-09-01T07:25:00.425Z"
+      }
+    },
+    {
+      "model": "realestate.gift",
+      "pk": 11,
+      "fields": {
+        "name": "Tourism fund \u20b950,000",
+        "description": null,
+        "required_star_level": 4,
+        "created_at": "2025-09-01T07:25:00.431Z"
+      }
+    },
+    {
+      "model": "realestate.gift",
+      "pk": 12,
+      "fields": {
+        "name": "Loan eligibility \u20b95,00,000",
+        "description": null,
+        "required_star_level": 4,
+        "created_at": "2025-09-01T07:25:00.436Z"
+      }
+    },
+    {
+      "model": "realestate.gift",
+      "pk": 13,
+      "fields": {
+        "name": "TVS Jupiter",
+        "description": null,
+        "required_star_level": 5,
+        "created_at": "2025-09-01T07:25:00.442Z"
+      }
+    },
+    {
+      "model": "realestate.gift",
+      "pk": 14,
+      "fields": {
+        "name": "Honda Shine bike",
+        "description": null,
+        "required_star_level": 5,
+        "created_at": "2025-09-01T07:25:00.448Z"
+      }
+    },
+    {
+      "model": "realestate.gift",
+      "pk": 15,
+      "fields": {
+        "name": "Loan eligibility \u20b910,00,000",
+        "description": null,
+        "required_star_level": 5,
+        "created_at": "2025-09-01T07:25:00.454Z"
+      }
+    },
+    {
+      "model": "realestate.gift",
+      "pk": 16,
+      "fields": {
+        "name": "302 sq yards plot (Narayanakhed)",
+        "description": null,
+        "required_star_level": 6,
+        "created_at": "2025-09-01T07:25:00.460Z"
+      }
+    },
+    {
+      "model": "realestate.gift",
+      "pk": 17,
+      "fields": {
+        "name": "Shares value \u20b95,00,000",
+        "description": null,
+        "required_star_level": 6,
+        "created_at": "2025-09-01T07:25:00.465Z"
+      }
+    },
+    {
+      "model": "realestate.gift",
+      "pk": 18,
+      "fields": {
+        "name": "Car down payment \u20b95,00,000",
+        "description": null,
+        "required_star_level": 6,
+        "created_at": "2025-09-01T07:25:00.471Z"
+      }
+    },
+    {
+      "model": "realestate.gift",
+      "pk": 19,
+      "fields": {
+        "name": "10% royalty on company profit for 10 years",
+        "description": null,
+        "required_star_level": 7,
+        "created_at": "2025-09-01T07:25:00.476Z"
+      }
+    },
+    {
+      "model": "realestate.gift",
+      "pk": 20,
+      "fields": {
+        "name": "Flat in Hyderabad (2BHK)",
+        "description": null,
+        "required_star_level": 7,
+        "created_at": "2025-09-01T07:25:00.482Z"
+      }
+    },
+    {
+      "model": "realestate.gift",
+      "pk": 21,
+      "fields": {
+        "name": "Children's marriage fund \u20b910,00,000",
+        "description": null,
+        "required_star_level": 7,
+        "created_at": "2025-09-01T07:25:00.486Z"
+      }
+    }
+  ],
+  "agent_gifts": [
+    {
+      "model": "realestate.agentgift",
+      "pk": 1,
+      "fields": {
+        "agent": 2,
+        "gift": 1,
+        "status": "pending",
+        "date_earned": "2025-09-01T07:35:20.802Z",
+        "date_delivered": null
+      }
+    },
+    {
+      "model": "realestate.agentgift",
+      "pk": 2,
+      "fields": {
+        "agent": 2,
+        "gift": 2,
+        "status": "pending",
+        "date_earned": "2025-09-01T07:35:20.807Z",
+        "date_delivered": null
+      }
+    },
+    {
+      "model": "realestate.agentgift",
+      "pk": 3,
+      "fields": {
+        "agent": 2,
+        "gift": 3,
+        "status": "pending",
+        "date_earned": "2025-09-01T07:35:20.813Z",
+        "date_delivered": null
+      }
+    }
+  ]
+}
