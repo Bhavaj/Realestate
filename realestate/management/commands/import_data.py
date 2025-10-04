@@ -9,7 +9,23 @@ class Command(BaseCommand):
         parser.add_argument('export_file', type=str, nargs='?', default='data_export/render_data_export_20251003_192946.json', help='Path to the export file')
 
     def handle(self, *args, **options):
-        """Import data from export file"""
+        """Import data from export file - only if database is empty"""
+        
+        from realestate.models import Agent, Customer, Payment, Project, Gift, AgentGift
+        
+        # Check if database already has data
+        total_records = (
+            Agent.objects.count() + 
+            Customer.objects.count() + 
+            Project.objects.count() + 
+            Payment.objects.count() + 
+            AgentGift.objects.count()
+        )
+        
+        if total_records > 0:
+            self.stdout.write(self.style.WARNING("⚠️  Database already contains data. Skipping import to prevent data loss."))
+            self.stdout.write(f"📊 Current data: Agents={Agent.objects.count()}, Customers={Customer.objects.count()}, Projects={Project.objects.count()}, Payments={Payment.objects.count()}, Agent Gifts={AgentGift.objects.count()}")
+            return
         
         export_file = options['export_file']
         
@@ -24,9 +40,9 @@ class Command(BaseCommand):
             return
         
         from django.core import serializers
-        from realestate.models import Agent, Customer, Payment, Project, Gift, AgentGift
         
-        self.stdout.write("🔄 Starting data import from Render...")
+        self.stdout.write("🔄 Starting initial data import from Render...")
+        self.stdout.write("ℹ️  This will only run once when database is empty.")
         
         # Import in correct order (respecting foreign key dependencies)
         import_order = [
@@ -42,11 +58,6 @@ class Command(BaseCommand):
             for model_name, model_class in import_order:
                 if model_name in export_data and export_data[model_name]:
                     try:
-                        # Clear existing data for this model (except gifts and projects)
-                        if model_name not in ['gifts', 'projects']:
-                            model_class.objects.all().delete()
-                            self.stdout.write(f"🗑️  Cleared existing {model_name}")
-                        
                         # Deserialize and save objects
                         serialized_data = json.dumps(export_data[model_name])
                         objects = serializers.deserialize('json', serialized_data)
@@ -62,7 +73,7 @@ class Command(BaseCommand):
                         self.stdout.write(self.style.ERROR(f"❌ Error importing {model_name}: {e}"))
                         # Continue with other models
         
-        self.stdout.write("🎉 Data import completed successfully!")
+        self.stdout.write("🎉 Initial data import completed successfully!")
         
         # Verify import
         self.stdout.write("🔍 Verifying import...")
