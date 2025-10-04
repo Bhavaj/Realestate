@@ -4,7 +4,9 @@ from . import views
 
 urlpatterns = [
     # Home and authentication
-    path('', views.home, name='home'),
+    path('', views.vijay_home, name='home'),
+    path('oxygen-club/', views.oxygen_club, name='oxygen-club'),
+    path('legacy-home/', views.home, name='legacy-home'),  # Keep old home as legacy
     path('agent-login/', views.agent_login, name='agent_login'),
     path('agent-dashboard/', views.agent_dashboard, name='agent_dashboard'),
     path('agent-logout/', LogoutView.as_view(next_page='agent_login'), name='agent_logout'),

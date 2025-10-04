@@ -30,6 +30,12 @@ from .models import Agent, Customer, Payment, Gift, AgentGift, Project
 def home(request):
     return render(request, "home.html")
 
+def vijay_home(request):
+    return render(request, "vijay_home.html")
+
+def oxygen_club(request):
+    return render(request, "oxygen_club.html")
+
 
 def agent_login(request):
     if request.method == "POST":

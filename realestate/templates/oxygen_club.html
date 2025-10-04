@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oxygen Club - Vijay Developers Reward System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #1e293b;
+        }
+        
+        .oxygen-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 0;
+        }
+        
+        .oxygen-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+            max-width: 1200px;
+            width: 100%;
+        }
+        
+        .oxygen-header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .oxygen-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .oxygen-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 0;
+        }
+        
+        .login-section {
+            padding: 50px 40px;
+        }
+        
+        .login-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+            height: 100%;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        
+        .login-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .login-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+        
+        .login-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .login-description {
+            color: #64748b;
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+        
+        .btn-login {
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 10px;
+            border: none;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn-admin {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .btn-agent {
+            background: linear-gradient(45deg, #10b981, #059669);
+            color: white;
+        }
+        
+        .btn-customer {
+            background: linear-gradient(45deg, #06b6d4, #0891b2);
+            color: white;
+        }
+        
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .features-grid {
+            background: #f8fafc;
+            padding: 40px;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .feature-item {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .feature-icon {
+            font-size: 2rem;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .feature-text {
+            font-size: 0.9rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+        
+        @media (max-width: 768px) {
+            .oxygen-title {
+                font-size: 2rem;
+            }
+            
+            .login-section {
+                padding: 30px 20px;
+            }
+            
+            .login-card {
+                padding: 30px 20px;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="oxygen-container">
+        <div class="oxygen-card">
+            <a href="{% url 'home' %}" class="back-btn">
+                <i class="fas fa-arrow-left me-2"></i>Back to Vijay Developers
+            </a>
+            
+            <div class="oxygen-header">
+                <h1 class="oxygen-title">
+                    <i class="fas fa-star"></i>
+                    Oxygen Club
+                    <i class="fas fa-star"></i>
+                </h1>
+                <p class="oxygen-subtitle">Vijay Developers Premium Reward & Management System</p>
+            </div>
+            
+            <div class="login-section">
+                <div class="row g-4">
+                    <!-- Admin Login -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="login-card">
+                            <i class="fas fa-user-shield login-icon text-primary"></i>
+                            <h3 class="login-title text-primary">Admin Portal</h3>
+                            <p class="login-description">
+                                Manage agents, customers, projects, and reward systems. Full administrative control over the Oxygen Club platform.
+                            </p>
+                            <a href="{% url 'admin-login' %}" class="btn btn-login btn-admin">
+                                <i class="fas fa-sign-in-alt me-2"></i>Admin Login
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Agent Login -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="login-card">
+                            <i class="fas fa-user-tie login-icon text-success"></i>
+                            <h3 class="login-title text-success">Agent Dashboard</h3>
+                            <p class="login-description">
+                                Track your PV points, star levels, and earned rewards. Monitor your performance and unlock premium benefits.
+                            </p>
+                            <a href="{% url 'agent_login' %}" class="btn btn-login btn-agent">
+                                <i class="fas fa-chart-line me-2"></i>Agent Login
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Customer Login -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="login-card">
+                            <i class="fas fa-user login-icon text-info"></i>
+                            <h3 class="login-title text-info">Customer Portal</h3>
+                            <p class="login-description">
+                                View your agent's performance, project payment history, and track your investment with Vijay Developers.
+                            </p>
+                            <a href="{% url 'customer_login' %}" class="btn btn-login btn-customer">
+                                <i class="fas fa-eye me-2"></i>Customer Access
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="features-grid">
+                <div class="row">
+                    <div class="col-md-3 col-6">
+                        <div class="feature-item">
+                            <i class="fas fa-trophy feature-icon"></i>
+                            <div class="feature-text">7-Star Reward System</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="feature-item">
+                            <i class="fas fa-chart-bar feature-icon"></i>
+                            <div class="feature-text">Real-time Analytics</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="feature-item">
+                            <i class="fas fa-gift feature-icon"></i>
+                            <div class="feature-text">Premium Rewards</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="feature-item">
+                            <i class="fas fa-shield-alt feature-icon"></i>
+                            <div class="feature-text">Secure Platform</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
