@@ -10,8 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+load_dotenv()
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,12 +25,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-k5ees#)vqnwhj2u9ev*368nf^7kk)&#t^_r)njl%(w6&k63h3p')
+SECRET_KEY = os.getenv('SECRET_KEY')
+DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
-ALLOWED_HOSTS = ['*']  # Allow all hosts for Railway deployment
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    '3.151.42.16',  # EC2 public IP
+]
+
 
 
 # Application definition
@@ -73,23 +81,27 @@ WSGI_APPLICATION = 'realestate_project.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
-if os.environ.get('DATABASE_URL'):
-    import dj_database_url
-    db_config = dj_database_url.parse(os.environ.get('DATABASE_URL'))
-    # Use the standard PostgreSQL backend; Django will use psycopg3 if installed
-    if db_config['ENGINE'] == 'django.db.backends.postgresql_psycopg':
-        db_config['ENGINE'] = 'django.db.backends.postgresql'
-    DATABASES = {
-        'default': db_config
-    }
-else:
+if os.getenv("USE_SQLITE", "false").lower() == "true":
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.getenv('DB_NAME'),
+            'USER': os.getenv('DB_USER'),
+            'PASSWORD': os.getenv('DB_PASSWORD'),
+            'HOST': os.getenv('DB_HOST', 'localhost'),
+            'PORT': '5432',
+        }
+    }
+
+
+
 
 AUTH_USER_MODEL = 'realestate.Agent'
 LOGIN_URL = '/agent-login/'
@@ -141,28 +153,3 @@ os.makedirs(STATIC_ROOT, exist_ok=True)
 # Add whitenoise middleware for static files
 MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
 
-# Railway-specific settings
-if os.environ.get('RAILWAY_ENVIRONMENT'):
-    # Force HTTPS in production
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    SECURE_SSL_REDIRECT = True
-    
-    # CSRF settings for Railway
-    CSRF_TRUSTED_ORIGINS = [
-        'https://web-production-50e3.up.railway.app',
-        'https://*.railway.app',
-    ]
-    CSRF_COOKIE_SECURE = True
-    CSRF_COOKIE_SAMESITE = 'None'
-    
-    # Session settings for Railway
-    SESSION_COOKIE_SECURE = True
-    SESSION_COOKIE_SAMESITE = 'None'
-    
-    # Additional Railway settings
-    ALLOWED_HOSTS = ['*', 'web-production-50e3.up.railway.app', '.railway.app']
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
