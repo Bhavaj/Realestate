@@ -31,7 +31,7 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://verbose-orbit-r9jj7qrr9j5hwp6q-8000.app.github.dev",
+    "http://localhost:8000",
     "https://*.app.github.dev",
 ]
 
