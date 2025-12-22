@@ -27,16 +27,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://verbose-orbit-r9jj7qrr9j5hwp6q-8000.app.github.dev',
+    "https://verbose-orbit-r9jj7qrr9j5hwp6q-8000.app.github.dev",
+    "https://*.app.github.dev",
 ]
 
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     '3.151.42.16',
-    'verbose-orbit-r9jj7qrr9j5hwp6q-8000.app.github.dev',  
+    'verbose-orbit-r9jj7qrr9j5hwp6q-8000.app.github.dev',
+    ".app.github.dev",  
 ]
 
 
