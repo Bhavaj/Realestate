@@ -28,11 +28,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://verbose-orbit-r9jj7qrr9j5hwp6q-8000.app.github.dev',
+]
 
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    '3.151.42.16',  # EC2 public IP
+    '3.151.42.16',
+    'verbose-orbit-r9jj7qrr9j5hwp6q-8000.app.github.dev',  
 ]
 
 
