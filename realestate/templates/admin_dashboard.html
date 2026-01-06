@@ -186,8 +186,8 @@
                         <tbody>
                             {% for agent in agents %}
                             <tr>
-                                <td><strong>{{ agent.agent_number }}</strong></td>
                                 <td><strong>{{ agent.username }}</strong></td>
+                                <td><strong>{{ agent.agent_number }}</strong></td>
                                 <td>{{ agent.email }}</td>
                                 <td><span class="badge bg-info">{{ agent.total_points }}</span></td>
                                 <td><span class="badge bg-warning">{{ agent.star_level }} ⭐</span></td>
