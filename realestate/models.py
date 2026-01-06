@@ -5,6 +5,12 @@ from django.dispatch import receiver
 
 
 class Agent(AbstractUser):
+    agent_number = models.CharField(
+        max_length=20,
+        unique=True,
+        blank=True,
+        null=True
+    )
     total_points = models.IntegerField(default=0)
     # Star levels: 0 (no star) to 7. 1-star unlocked at 2,500 PV
     star_level = models.IntegerField(default=0)
@@ -52,6 +58,14 @@ class Agent(AbstractUser):
         if next_points == 0:
             return "🎉 Max Level!"
         return f"{next_points} PV to Level {min(self.star_level + 1, 7)}"
+
+    def save(self,*args,**kwargs):
+        is_new = self.pk is None
+        super().save(*args,**kwargs)
+        if is_new and not self.agent_number:
+            self.agent_number=f'AG{self.id:06d}'
+            super().save(update_fields=['agent_number'])
+
 
     def __str__(self):
         return self.username

@@ -17,8 +17,8 @@ class AgentGiftInline(admin.TabularInline):
 @admin.register(Agent)
 class AgentAdmin(UserAdmin):
     model = Agent
-    list_display = ('username', 'email', 'total_points', 'star_level', 'next_milestone_display')
-    readonly_fields = ('total_points', 'star_level')
+    list_display = ('username','agent_number', 'email', 'total_points', 'star_level', 'next_milestone_display')
+    readonly_fields = ('total_points', 'star_level','agent_number')
     
     fieldsets = UserAdmin.fieldsets + (
         ('Rewards Info', {'fields': ('total_points', 'star_level')}),
